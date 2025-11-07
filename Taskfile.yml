@@ -1,7 +1,10 @@
 version: "3"
 
 vars:
-  TAR_CMD: "gnutar" 
+  APP_VERSION: "v1.0.1"
+  TAR_CMD: "gnutar"
+  LDFLAGS: "-s -w"
+  BUILDFLAGS: "-trimpath -buildvcs=false"
 
 tasks:
   build-all:
@@ -12,47 +15,65 @@ tasks:
       # --- Linux amd64 ---
       - |
         echo "Building Linux amd64..."
-        GOOS=linux GOARCH=amd64 go build -o dist/templr-linux-amd64 .
-        {{.TAR_CMD}} -cvf dist/templr-linux-amd64.tar dist/templr-linux-amd64
-        gzip -f dist/templr-linux-amd64.tar
+        GOOS=linux GOARCH=amd64 go build {{.BUILDFLAGS}} -ldflags="{{.LDFLAGS}}" -o dist/templr-linux-amd64 .
+
+        cp dist/templr-linux-amd64 dist/templr
+        {{.TAR_CMD}} -C dist -cvf dist/templr-linux-amd64-{{.APP_VERSION}}.tar templr
+        gzip -f dist/templr-linux-amd64-{{.APP_VERSION}}.tar
+
         rm dist/templr-linux-amd64
+        rm dist/templr
 
       # --- Linux arm64 ---
       - |
         echo "Building Linux arm64..."
-        GOOS=linux GOARCH=arm64 go build -o dist/templr-linux-arm64 .
-        {{.TAR_CMD}} -cvf dist/templr-linux-arm64.tar dist/templr-linux-arm64
-        gzip -f dist/templr-linux-arm64.tar
+        GOOS=linux GOARCH=arm64 go build {{.BUILDFLAGS}} -ldflags="{{.LDFLAGS}}" -o dist/templr-linux-arm64 .
+
+        cp dist/templr-linux-arm64 dist/templr
+        {{.TAR_CMD}} -C dist -cvf dist/templr-linux-arm64-{{.APP_VERSION}}.tar templr
+        gzip -f dist/templr-linux-arm64-{{.APP_VERSION}}.tar
+
         rm dist/templr-linux-arm64
+        rm dist/templr
 
       # --- macOS amd64 ---
       - |
         echo "Building macOS amd64..."
-        GOOS=darwin GOARCH=amd64 go build -o dist/templr-darwin-amd64 .
-        {{.TAR_CMD}} -cvf dist/templr-darwin-amd64.tar dist/templr-darwin-amd64
-        gzip -f dist/templr-darwin-amd64.tar
+        GOOS=darwin GOARCH=amd64 go build {{.BUILDFLAGS}} -ldflags="{{.LDFLAGS}}" -o dist/templr-darwin-amd64 .
+
+        cp dist/templr-darwin-amd64 dist/templr
+        {{.TAR_CMD}} -C dist -cvf dist/templr-darwin-amd64-{{.APP_VERSION}}.tar templr
+        gzip -f dist/templr-darwin-amd64-{{.APP_VERSION}}.tar
+
         rm dist/templr-darwin-amd64
+        rm dist/templr
 
       # --- macOS arm64 ---
       - |
         echo "Building macOS arm64..."
-        GOOS=darwin GOARCH=arm64 go build -o dist/templr-darwin-arm64 .
-        {{.TAR_CMD}} -cvf dist/templr-darwin-arm64.tar dist/templr-darwin-arm64
-        gzip -f dist/templr-darwin-arm64.tar
+        GOOS=darwin GOARCH=arm64 go build {{.BUILDFLAGS}} -ldflags="{{.LDFLAGS}}" -o dist/templr-darwin-arm64 .
+
+        cp dist/templr-darwin-arm64 dist/templr
+        {{.TAR_CMD}} -C dist -cvf dist/templr-darwin-arm64-{{.APP_VERSION}}.tar templr
+        gzip -f dist/templr-darwin-arm64-{{.APP_VERSION}}.tar
+
         rm dist/templr-darwin-arm64
+        rm dist/templr
 
       # --- Windows amd64 ---
       - |
         echo "Building Windows amd64..."
-        GOOS=windows GOARCH=amd64 go build -o dist/templr-windows-amd64.exe .
-        powershell Compress-Archive -Path dist/templr-windows-amd64.exe -DestinationPath dist/templr-windows-amd64.zip -Force
+        GOOS=windows GOARCH=amd64 go build {{.BUILDFLAGS}} -ldflags="{{.LDFLAGS}}" -o dist/templr-windows-amd64.exe .
+
+        powershell Compress-Archive -Path dist/templr-windows-amd64.exe -DestinationPath dist/templr-windows-amd64-{{.APP_VERSION}}.zip -Force
         rm dist/templr-windows-amd64.exe
 
       # --- Windows arm64 ---
       - |
         echo "Building Windows arm64..."
-        GOOS=windows GOARCH=arm64 go build -o dist/templr-windows-arm64.exe .
-        powershell Compress-Archive -Path dist/templr-windows-arm64.exe -DestinationPath dist/templr-windows-arm64.zip -Force
+        GOOS=windows GOARCH=arm64 go build {{.BUILDFLAGS}} -ldflags="{{.LDFLAGS}}" -o dist/templr-windows-arm64.exe .
+
+        powershell Compress-Archive -Path dist/templr-windows-arm64.exe -DestinationPath dist/templr-windows-arm64-{{.APP_VERSION}}.zip -Force
         rm dist/templr-windows-arm64.exe
 
     silent: false
