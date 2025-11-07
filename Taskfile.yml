@@ -1,22 +1,58 @@
 version: "3"
 
+vars:
+  TAR_CMD: "gnutar" 
+
 tasks:
   build-all:
     desc: "Build templr for Linux, macOS and Windows"
     cmds:
-      # Linux
+      - mkdir -p dist/
+
+      # --- Linux amd64 ---
       - |
-        echo "Building for Linux..."
+        echo "Building Linux amd64..."
         GOOS=linux GOARCH=amd64 go build -o dist/templr-linux-amd64 .
+        {{.TAR_CMD}} -cvf dist/templr-linux-amd64.tar dist/templr-linux-amd64
+        gzip -f dist/templr-linux-amd64.tar
+        rm dist/templr-linux-amd64
 
-      # macOS
+      # --- Linux arm64 ---
       - |
-        echo "Building for macOS..."
+        echo "Building Linux arm64..."
+        GOOS=linux GOARCH=arm64 go build -o dist/templr-linux-arm64 .
+        {{.TAR_CMD}} -cvf dist/templr-linux-arm64.tar dist/templr-linux-arm64
+        gzip -f dist/templr-linux-arm64.tar
+        rm dist/templr-linux-arm64
+
+      # --- macOS amd64 ---
+      - |
+        echo "Building macOS amd64..."
         GOOS=darwin GOARCH=amd64 go build -o dist/templr-darwin-amd64 .
+        {{.TAR_CMD}} -cvf dist/templr-darwin-amd64.tar dist/templr-darwin-amd64
+        gzip -f dist/templr-darwin-amd64.tar
+        rm dist/templr-darwin-amd64
 
-      # Windows
+      # --- macOS arm64 ---
       - |
-        echo "Building for Windows..."
+        echo "Building macOS arm64..."
+        GOOS=darwin GOARCH=arm64 go build -o dist/templr-darwin-arm64 .
+        {{.TAR_CMD}} -cvf dist/templr-darwin-arm64.tar dist/templr-darwin-arm64
+        gzip -f dist/templr-darwin-arm64.tar
+        rm dist/templr-darwin-arm64
+
+      # --- Windows amd64 ---
+      - |
+        echo "Building Windows amd64..."
         GOOS=windows GOARCH=amd64 go build -o dist/templr-windows-amd64.exe .
+        powershell Compress-Archive -Path dist/templr-windows-amd64.exe -DestinationPath dist/templr-windows-amd64.zip -Force
+        rm dist/templr-windows-amd64.exe
+
+      # --- Windows arm64 ---
+      - |
+        echo "Building Windows arm64..."
+        GOOS=windows GOARCH=arm64 go build -o dist/templr-windows-arm64.exe .
+        powershell Compress-Archive -Path dist/templr-windows-arm64.exe -DestinationPath dist/templr-windows-arm64.zip -Force
+        rm dist/templr-windows-arm64.exe
 
     silent: false
