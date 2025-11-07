@@ -1,7 +1,7 @@
 version: "3"
 
 vars:
-  APP_VERSION: "v1.0.1"
+  APP_VERSION: "v1.0.2"
   TAR_CMD: "gnutar"
   LDFLAGS: "-s -w"
   BUILDFLAGS: "-trimpath -buildvcs=false"
