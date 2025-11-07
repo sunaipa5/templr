@@ -1,0 +1,22 @@
+version: "3"
+
+tasks:
+  build-all:
+    desc: "Build templr for Linux, macOS and Windows"
+    cmds:
+      # Linux
+      - |
+        echo "Building for Linux..."
+        GOOS=linux GOARCH=amd64 go build -o dist/templr-linux-amd64 .
+
+      # macOS
+      - |
+        echo "Building for macOS..."
+        GOOS=darwin GOARCH=amd64 go build -o dist/templr-darwin-amd64 .
+
+      # Windows
+      - |
+        echo "Building for Windows..."
+        GOOS=windows GOARCH=amd64 go build -o dist/templr-windows-amd64.exe .
+
+    silent: false
