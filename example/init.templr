@@ -1,4 +1,4 @@
 go mod init %p
 go mod tidy
 zed .
-notify-send "templr" "Project ready!"
+echo here is my project name: %p
