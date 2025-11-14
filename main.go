@@ -9,7 +9,7 @@ func main() {
 	os.MkdirAll(templrDir(), 0755)
 
 	if len(os.Args) < 2 {
-		fmt.Println("Templr v1.0.2")
+		fmt.Println("Templr v1.0.3")
 		fmt.Println("Usage: templr [list|init]")
 		return
 	}
