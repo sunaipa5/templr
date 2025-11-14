@@ -83,3 +83,14 @@ into:
 ```
 ./myproject/
 ```
+
+## init.templr
+You can create `init.templr` file in your template. When you create a new project `init.templr` will be executed in that project.
+You can use `%p` to reference the project name in commands.
+
+Example: 
+```
+go mod init %p
+echo here is my project name: %p
+```
+
