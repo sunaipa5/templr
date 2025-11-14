@@ -9,7 +9,7 @@ import (
 func listTemplates() {
 	files, err := os.ReadDir(templrDir())
 	if err != nil {
-		fmt.Println("Error reading templates:", err)
+		werror("Error reading templates: " + err.Error())
 		return
 	}
 
@@ -21,7 +21,7 @@ func listTemplates() {
 			}
 		}
 	} else {
-		fmt.Println("No template found")
+		warning("No template found")
 	}
 }
 
@@ -30,15 +30,37 @@ func initProject(templateName, projectName string) {
 	dest := filepath.Join(".", projectName)
 
 	if _, err := os.Stat(src); os.IsNotExist(err) {
-		fmt.Println("Template not found:", templateName)
+		werror("Template not found: " + templateName)
 		return
 	}
 
-	err := copyDir(src, dest)
+	err := copyDir(src, dest, "init.templr")
 	if err != nil {
-		fmt.Println("Error copying template:", err)
+		werror("Error copying template: " + err.Error())
 		return
 	}
 
-	fmt.Printf("Project '%s' created from template '%s'\n", projectName, templateName)
+	winfo("Project '%s' created from template '%s'", projectName, templateName)
+
+	if err := runInitTemplr(src, projectName); err != nil {
+		werror("Error running init.templr: " + err.Error())
+	}
+
+	wsuccess("Done.")
+}
+
+func wsuccess(msg string, args ...any) {
+	fmt.Printf("\033[32m%s\033[0m\n", fmt.Sprintf(msg, args...))
+}
+
+func werror(msg string, args ...any) {
+	fmt.Printf("\033[31m%s\033[0m\n", fmt.Sprintf(msg, args...))
+}
+
+func winfo(msg string, args ...any) {
+	fmt.Printf("\033[34m%s\033[0m\n", fmt.Sprintf(msg, args...))
+}
+
+func warning(msg string, args ...any) {
+	fmt.Printf("\033[33m%s\033[0m\n", fmt.Sprintf(msg, args...))
 }

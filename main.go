@@ -24,6 +24,6 @@ func main() {
 		}
 		initProject(os.Args[2], os.Args[3])
 	default:
-		fmt.Println("Unknown command:", os.Args[1])
+		werror("Unknown command: " + os.Args[1])
 	}
 }
